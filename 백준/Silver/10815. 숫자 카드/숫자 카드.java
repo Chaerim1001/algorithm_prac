@@ -7,25 +7,27 @@ public class Main {
     static int[] arr;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
         N = Integer.parseInt(br.readLine());
         card = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++) {
             card[i] = Integer.parseInt(st.nextToken());
         }
-        M = Integer.parseInt(br.readLine());
-        arr = new int[M];
-        st = new StringTokenizer(br.readLine());
-        for(int i=0; i<M; i++) {
-            arr[i] = Integer.parseInt(st.nextToken());
-        }
-        
         Arrays.sort(card);
         
+        M = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());        
+
         for(int i=0; i<M; i++) {
-            if(search(arr[i])) System.out.print("1 ");
-            else System.out.print("0 ");
+            int num = Integer.parseInt(st.nextToken());
+            if(search(num))  bw.write("1 ");
+            else bw.write("0 ");
         }
+        
+        bw.close();
+        br.close();
     }
     
     static boolean search(int number) {
