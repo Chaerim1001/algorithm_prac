@@ -32,7 +32,7 @@ public class Main {
             for(int j=0; j<width; j++) {
                 for(int k=0; k<height; k++) {
                     if(map[j][k] == 1 && !visited[j][k]) {
-                        bfs(j, k);
+                        dfs(j, k);
                         answer++;
                     }
                 }
@@ -42,25 +42,20 @@ public class Main {
         
         br.close();
     }
+   
     
-    static void bfs(int x, int y) {
-        Queue<Node> queue = new LinkedList<>();
-        queue.add(new Node(x, y));
-        visited[x][y] = true;
+    static void dfs(int x, int y) {
+        if(visited[x][y]) return;
         
-        while(!queue.isEmpty()) {
-            Node now = queue.poll();
+        visited[x][y] = true;
+        for(int i=0; i<4; i++) {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+                
+            if(nx>=width || ny>=height || nx<0 || ny<0) continue;
+            if(visited[nx][ny] || map[nx][ny] != 1) continue;
             
-            for(int i=0; i<4; i++) {
-                int nx = now.x + dx[i];
-                int ny = now.y + dy[i];
-                
-                if(nx>=width || ny>=height || nx<0 || ny<0) continue;
-                if(visited[nx][ny] || map[nx][ny] != 1) continue;
-                
-                queue.add(new Node(nx, ny));
-                visited[nx][ny] = true;
-            }  
+            dfs(nx, ny);
         }
     }
     
