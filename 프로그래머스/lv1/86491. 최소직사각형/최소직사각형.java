@@ -2,22 +2,16 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] sizes) {
-        List<Integer> first = new ArrayList<>();
-        List<Integer> second = new ArrayList<>();
+        int max = 0;
+        int min = 0;
         
         for(int[] size: sizes) {
-            if(size[0] >= size[1]) {
-                first.add(size[0]);
-                second.add(size[1]);
-      
-            } else {
-                first.add(size[1]);
-                second.add(size[0]);
-            }
+            int tempMax = Math.max(size[0], size[1]);
+            int tempMin = Math.min(size[0], size[1]);
+            if(tempMax > max) max = tempMax;
+            if(tempMin > min) min = tempMin;
         }
 
-        Collections.sort(first, Collections.reverseOrder());
-        Collections.sort(second, Collections.reverseOrder());
-        return first.get(0) * second.get(0);
+        return max * min;
     }
 }
