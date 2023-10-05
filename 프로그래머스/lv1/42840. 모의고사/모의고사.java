@@ -2,37 +2,30 @@ import java.util.*;
 
 class Solution {
     public int[] solution(int[] answers) {
-        int[] one = {1,2,3,4,5};
-        int[] two = {2,1,2,3,2,4,2,5};
-        int[] three = {3,3,1,1,2,2,4,4,5,5};
+        int[][] patterns = {
+            {1,2,3,4,5},
+            {2,1,2,3,2,4,2,5},
+            {3,3,1,1,2,2,4,4,5,5}
+        };
         
-        int oneCnt = countAnswer(one, answers);
-        int twoCnt = countAnswer(two, answers);
-        int threeCnt = countAnswer(three, answers);
+        int[] hit = new int[3];
+        for(int i=0; i<hit.length; i++) {
+            for(int j=0; j<answers.length; j++) {
+                if(patterns[i][j%patterns[i].length] == answers[j]) hit[i]++;
+            }
+        }
         
-        List<Integer> temp = new ArrayList<>();
-        int max = Math.max(oneCnt, Math.max(twoCnt, threeCnt));
+        int max = Math.max(hit[0], Math.max(hit[1], hit[2]));
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i< hit.length; i++) {
+            if(max == hit[i]) list.add(i+1);
+        }
         
-        if(max == oneCnt) temp.add(1);
-        if(max == twoCnt) temp.add(2);
-        if(max == threeCnt) temp.add(3);
-        
-        int[] answer = new int[temp.size()];
-        for(int i=0; i<temp.size(); i++) {
-            answer[i] = temp.get(i);
+        int[] answer = new int[list.size()];
+        for(int i=0; i<list.size(); i++) {
+            answer[i] = list.get(i);
         }
         
         return answer;
-    }
-    
-    private int countAnswer(int[] personAnswer, int[] answers) {
-        int count = 0;
-        
-        if(personAnswer[0] == answers[0]) count++;
-        for(int i=1; i<answers.length; i++) {    
-            if(personAnswer[i%personAnswer.length] == answers[i]) count++;
-        }
-        
-        return count;
     }
 }
