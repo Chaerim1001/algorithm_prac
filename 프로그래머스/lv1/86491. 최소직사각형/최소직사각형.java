@@ -2,18 +2,22 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] sizes) {
-        int max_w = 0;
-        int max_h = 0;
+        List<Integer> first = new ArrayList<>();
+        List<Integer> second = new ArrayList<>();
         
-        for (int i = 0; i < sizes.length; i++) {
-            Arrays.sort(sizes[i]); 
+        for(int[] size: sizes) {
+            if(size[0] >= size[1]) {
+                first.add(size[0]);
+                second.add(size[1]);
+      
+            } else {
+                first.add(size[1]);
+                second.add(size[0]);
+            }
         }
-        
-        for (int i = 0; i < sizes.length; i++) {
-            if (max_h < sizes[i][0]) max_h = sizes[i][0]; 
-            if (max_w < sizes[i][1]) max_w = sizes[i][1]; 
-        }
-        
-        return max_w * max_h;
+
+        Collections.sort(first, Collections.reverseOrder());
+        Collections.sort(second, Collections.reverseOrder());
+        return first.get(0) * second.get(0);
     }
 }
