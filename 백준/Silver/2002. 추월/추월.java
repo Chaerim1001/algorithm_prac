@@ -7,25 +7,23 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         
         // 들어간 차
-        List<String> in = new LinkedList<>();
+        Queue<String> in = new LinkedList<>();
         for(int i=0; i<N; i++) {
             in.add(br.readLine());
         }
         // 나온 차
-        List<String> out = new LinkedList<>();
+        Queue<String> out = new LinkedList<>();
         for(int i=0; i<N; i++) {
             out.add(br.readLine());
         }
         
         int answer = 0;
         while(!out.isEmpty()) {
-            if(!in.get(0).equals(out.get(0))) {
+            String outCar = out.poll();
+            if(!in.peek().equals(outCar)) {
                 answer++;
-                in.remove(out.get(0));
-            } else {
-                in.remove(0);
-            }
-            out.remove(0);
+                in.remove(outCar);
+            } else in.poll();
         }
         
         System.out.println(answer);
