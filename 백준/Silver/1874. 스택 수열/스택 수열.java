@@ -1,34 +1,33 @@
-import java.util.Scanner;
-import java.util.Stack;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-
-        Stack<Integer> stack = new Stack<>();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
+        int n = Integer.parseInt(br.readLine());
 
-        int start = 0;
+        int number = 1;
+        Stack<Integer> stack = new Stack<>();
+        while(n>0) {
+            int target = Integer.parseInt(br.readLine());
 
-        while(N > 0){
-            int value=sc.nextInt();
-            if(value>start){
-                for(int i=start+1; i<=value; i++){
+            if(target>=number) {
+                for(int i=number; i<=target; i++) {
                     stack.push(i);
                     sb.append("+").append('\n');
                 }
-                start=value; 
-            }
-            else if(stack.peek() != value){ 
+                number = target+1;
+            } else if(stack.peek() != target) {
                 System.out.println("NO");
                 return;
-            }
+            } 
+            
             stack.pop();
-            sb.append('-').append('\n');
-            N--;
+            sb.append("-").append('\n');
+            n--;
         }
+
         System.out.println(sb);
     }
 }
