@@ -1,27 +1,25 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int num = sc.nextInt();
-        int[] scores = new int[num];
-        
-        for(int i = 0; i < num; i++) {
-            scores[i] = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        double[] scores = new double[n];
+        for(int i=0; i<n; i++) {
+            double temp = Double.parseDouble(st.nextToken());
+            scores[i] = temp;
         }
-        
-        sc.close();
-        
-        long sum = 0;
-        long max_score = 0;
-        
-        for(int i = 0; i < num; i++) {
-            if(scores[i] > max_score) {
-                max_score = scores[i];
-            }
-            sum += scores[i];
+
+        Arrays.sort(scores);
+        double sum = 0;
+        for(int i=0; i<n; i++) {
+            sum+= ((scores[i]/scores[n-1])*100);
         }
-        
-        System.out.println(sum * 100.0 / max_score / num);
+
+        System.out.println(sum/n);
+        br.close();
     }
 }
