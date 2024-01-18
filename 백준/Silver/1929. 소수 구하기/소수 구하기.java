@@ -1,25 +1,28 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int M = sc.nextInt();
-        int N = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int start = Integer.parseInt(st.nextToken());
+        int end = Integer.parseInt(st.nextToken());
         
-        int[] arr = new int[N+1];
-        for(int i=2; i<N+1; i++) {
-            arr[i] = i;
-        }
+        boolean[] numbers = new boolean[end+1];
         
-        for(int i=2; i<=Math.sqrt(N); i++) {
-            if(arr[i] == 0) continue;
-            for(int j=i+i; j<N+1; j+=i) {
-                arr[j] = 0;
+        numbers[0] = numbers[1] = true;
+        for(int i=2; i*i<=end; i++) {
+            if(!numbers[i]) {
+                for(int j=i*i; j<=end; j+=i) {
+                    numbers[j] = true;
+                }
             }
         }
         
-        for(int i=M; i<N+1; i++) {
-            if(arr[i] != 0) System.out.println(arr[i]);
+        for(int i=start; i<=end; i++) {
+            if(!numbers[i]) System.out.println(i);
         }
+        
+        br.close();
     }
 }
