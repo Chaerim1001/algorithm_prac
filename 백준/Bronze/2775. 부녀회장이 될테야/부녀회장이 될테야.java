@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.*;
+
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -12,11 +14,7 @@ public class Main {
 
         for(int i=1; i<15; i++) {
             for(int j=1; j<15; j++) {
-                int temp = j;
-                while(temp>=1) {
-                    apartment[i][j] += apartment[i-1][temp];
-                    temp--;
-                }
+                apartment[i][j] = apartment[i-1][j] + apartment[i][j-1];
             }
         }
 
