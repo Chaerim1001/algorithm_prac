@@ -1,30 +1,30 @@
 import java.io.*;
 
 public class Main {
-	private static Long[] seq = new Long[101];
+    static long[] P = new long[101];
     
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		
-		seq[0] = 0L;
-		seq[1] = 1L;
-		seq[2] = 1L;
-		seq[3] = 1L;
-		
-		int T = Integer.parseInt(br.readLine());
-		while(T-->0) {
-			sb.append(padovan(Integer.parseInt(br.readLine()))).append('\n');
-		}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
         
-		System.out.println(sb);
+        calculateP();
+        
+        for(int i=0; i<T; i++) {
+            int target = Integer.parseInt(br.readLine());
+            System.out.println(P[target]);
+        }
+        
         br.close();
-	}
-	
-	public static long padovan(int N) {
-		if(seq[N] == null) {
-			seq[N] = padovan(N - 2) + padovan(N - 3);
-		}
-		return seq[N];
-	}
+    }
+    
+    static void calculateP() {
+		P[0] = 0;
+        P[1] = 1;
+        P[2] = 1;
+        P[3] = 1;
+        
+        for(int i=4; i<=100; i++) {
+            P[i] = P[i-2] + P[i-3];
+        }        
+    }
 }
