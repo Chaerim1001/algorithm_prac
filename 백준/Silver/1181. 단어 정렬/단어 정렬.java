@@ -20,10 +20,13 @@ public class Main {
             }
         });
 
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         for(String s: list) {
-            System.out.println(s);
+            bw.write(s + "\n");
         }
 
+        bw.flush();
         br.close();
+        bw.close();
     }
 }
