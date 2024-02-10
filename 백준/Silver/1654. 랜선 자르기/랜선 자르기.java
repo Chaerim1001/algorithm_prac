@@ -11,17 +11,18 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         
         list = new ArrayList<>();
-        long max = 0;
+        long sum = 0;
         for(int i=0; i<K; i++) {
             long length = Long.parseLong(br.readLine());
             list.add(length);
-            max = Math.max(max, length);
+            sum += length;
         }
         
-        max++;
         long min = 0;
         long mid = 0;
-         
+        long max = sum / N;
+        max++;
+        
         while(min<max) {
             mid = (min+max)/2;
             long count = 0;
