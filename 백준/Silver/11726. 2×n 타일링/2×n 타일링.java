@@ -14,7 +14,7 @@ public class Main {
             dp[i] = (dp[i-1] + dp[i-2]) % 10_007;
         }
 
-        System.out.println(dp[N] % 10_007);
+        System.out.println(dp[N]);
         
         br.close();
     }
