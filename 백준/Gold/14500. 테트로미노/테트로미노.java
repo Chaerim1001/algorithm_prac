@@ -3,64 +3,69 @@ import java.util.*;
 
 public class Main {
     static int N, M;
-    static int[][] arr;
+    static int[][] board;
     static boolean[][] visited;
-    static int max = Integer.MIN_VALUE;
-    
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {-1, 1, 0, 0};
-    
+    static int[] dx = {-1, 1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
+    static int result = Integer.MIN_VALUE;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        
-        arr = new int[N][M];
-        visited = new boolean[N][M];
-        
+        board = new int[N][M];
+
         for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<M; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+                board[i][j] = Integer.parseInt(st.nextToken());
             }
         }
-        
-		for(int i=0; i<N; i++) {
-			for(int j=0; j<M; j++) {
-				visited[i][j] = true;
-				dfs(i,j,arr[i][j],1);
-				visited[i][j] = false;
-			}
-		}
+        visited = new boolean[N][M];
+        for(int i=0; i<N; i++) {
+            for(int j=0; j<M; j++) {
+                visited[i][j] = true;
+                solution(i, j, 1, board[i][j]);
+                other(i, j);
+                visited[i][j] = false;
+            }
+        }
 
-		System.out.println(max);
+        System.out.println(result);
         br.close();
     }
-    
-    static void dfs(int row, int col, int sum, int count) {
-		if(count == 4) {
-			max = Math.max(max, sum);
-			return;
-		}
 
-		for(int i=0; i<4; i++) {
-			int nowR = row + dx[i];
-			int nowC = col + dy[i];
+    static void solution(int startX, int startY, int count, int sum) {
+        if(count == 4) {
+            result = Math.max(result, sum);
+            return;
+        }
+        
+        for(int i=0; i<4; i++) {
+            int nx = startX + dx[i];
+            int ny = startY + dy[i];
 
-			if(nowR<0 || nowR>=N || nowC<0 || nowC>=M) continue;
+            if(nx<0 || ny<0 || nx>=N || ny>=M) continue;
+            if(!visited[nx][ny]) {
+                visited[nx][ny] = true;
+                solution(nx, ny, count+1, sum + board[nx][ny]);
+                visited[nx][ny] = false;
+            }
+        }
+    }
 
-			if(!visited[nowR][nowC]) {
-				if(count == 2) {
-					visited[nowR][nowC] = true;
-					dfs(row, col, sum + arr[nowR][nowC], count + 1);
-					visited[nowR][nowC] = false;
-				}
+    static void other(int x, int y) {
+        // ㅓ
+        if(x+2<N && y-1>=0) result = Math.max(result, board[x][y] + board[x+1][y] + board[x+2][y] + board[x+1][y-1]);
 
-				visited[nowR][nowC] = true;
-				dfs(nowR, nowC, sum + arr[nowR][nowC], count + 1);
-				visited[nowR][nowC] = false;
-			}
-		}
-	}
+        // ㅏ
+        if(x+2<N && y+1<M) result = Math.max(result, board[x][y] + board[x+1][y] + board[x+2][y] + board[x+1][y+1]);
+
+        // ㅗ
+        if(y+2<M && x-1>=0) result = Math.max(result, board[x][y] + board[x][y+1] + board[x][y+2] + board[x-1][y+1]);
+
+        // ㅜ
+        if(y+2<M && x+1<N) result = Math.max(result, board[x][y] + board[x][y+1] + board[x][y+2] + board[x+1][y+1]);
+    }
 }
