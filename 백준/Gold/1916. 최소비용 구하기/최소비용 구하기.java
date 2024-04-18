@@ -1,75 +1,72 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    static int N, M, start, end;
-    static int[] distance;
-    static ArrayList<Node>[] map;
-    static boolean[] visited;
+    static int N, M;
+    static List<City>[] bus;
     
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
         N = Integer.parseInt(br.readLine());
         M = Integer.parseInt(br.readLine());
-        distance = new int[N+1];
-        map = new ArrayList[N+1];
-        visited = new boolean[N+1];
-        
+        bus = new List[N+1];
         for(int i=1; i<N+1; i++) {
-            map[i] = new ArrayList<Node>();
+            bus[i] = new ArrayList<>();
         }
+
+        StringTokenizer st; 
         for(int i=0; i<M; i++) {
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int w = Integer.parseInt(st.nextToken());
-            map[s].add(new Node(e, w));
+            int a = Integer.parseInt(st.nextToken()); 
+            int b = Integer.parseInt(st.nextToken()); 
+            int c = Integer.parseInt(st.nextToken()); 
+
+            bus[a].add(new City(b, c));
         }
-        
+
         st = new StringTokenizer(br.readLine());
-        int start = Integer.parseInt(st.nextToken());
+        int start = Integer.parseInt(st.nextToken()); 
         int end = Integer.parseInt(st.nextToken());
-        
-        for(int i=1; i<N+1; i++) {
-            distance[i] = Integer.MAX_VALUE;
-        }
-        
-        int answer = dijkstra(start, end);
-        System.out.println(answer);
-        br.close();
-    }
-    
-    static int dijkstra(int start, int end) {
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        pq.offer(new Node(start, 0));
-        distance[start] = 0;
-        
-        while(!pq.isEmpty()) {
-            Node now = pq.poll();
-            if(!visited[now.end]) {
-                visited[now.end] = true;
-                for(Node n: map[now.end]) {
-                    if(!visited[n.end] && distance[n.end] > distance[now.end] + n.w) {
-                        distance[n.end] = distance[now.end] + n.w;
-                        pq.add(new Node(n.end, distance[n.end]));
-                    }
+
+        long[] arr = new long[N+1];
+        boolean[] visited = new boolean[N+1];
+
+        Arrays.fill(arr, Long.MAX_VALUE);
+        arr[start] = 0;
+
+        PriorityQueue<City> q = new PriorityQueue<>();
+        q.add(new City(start, 0));
+
+        while(!q.isEmpty()) {
+            City c = q.poll();
+            if(!visited[c.number]) {
+                visited[c.number] = true;
+                for(City next : bus[c.number]) {
+                    if(!visited[next.number] && arr[next.number] > c.cost+next.cost) {
+                        arr[next.number] = c.cost+next.cost;
+                        q.add(new City(next.number, arr[next.number]));
+                    }                    
                 }
             }
+            
         }
-        return distance[end];
+
+        System.out.println(arr[end]);
+        br.close();
     }
-}
-class Node implements Comparable<Node> {
-    int end, w;
-    
-    public Node(int end, int w) {
-        this.end = end;
-        this.w = w;
-    }
-    
-    @Override
-    public int compareTo(Node n) {
-        return w - n.w;
+
+    static class City implements Comparable<City>{
+        int number;
+        long cost;
+
+        public City(int number, long cost) {
+            this.number = number;
+            this.cost = cost;
+        }
+
+        @Override
+        public int compareTo(City c) {
+            return Long.compare(this.cost, c.cost);
+        }
     }
 }
