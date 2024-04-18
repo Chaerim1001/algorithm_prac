@@ -28,10 +28,10 @@ public class Main {
         int start = Integer.parseInt(st.nextToken()); 
         int end = Integer.parseInt(st.nextToken());
 
-        long[] arr = new long[N+1];
+        int[] arr = new int[N+1];
         boolean[] visited = new boolean[N+1];
 
-        Arrays.fill(arr, Long.MAX_VALUE);
+        Arrays.fill(arr, Integer.MAX_VALUE);
         arr[start] = 0;
 
         PriorityQueue<City> q = new PriorityQueue<>();
@@ -57,16 +57,16 @@ public class Main {
 
     static class City implements Comparable<City>{
         int number;
-        long cost;
+        int cost;
 
-        public City(int number, long cost) {
+        public City(int number, int cost) {
             this.number = number;
             this.cost = cost;
         }
 
         @Override
         public int compareTo(City c) {
-            return Long.compare(this.cost, c.cost);
+            return Integer.compare(this.cost, c.cost);
         }
     }
 }
