@@ -22,25 +22,24 @@ public class Main {
             sign[i] = st.nextToken();
         }
         
+        numbers = new int[N+1];
         for(int i=9; i>=0; i--) {
             if(maxFinish) break;
-            
-            numbers = new int[N+1];
+
             check = new boolean[10];
             check[i] = true;
             numbers[0] = i;
-            findMax(1, numbers);
+            findMax(1);
         }
         System.out.println(maxValue);
 
         for(int i=0; i<10; i++) {
             if(minFinish) break;
-            
-            numbers = new int[N+1];
+
             check = new boolean[10];
             check[i] = true;
             numbers[0] = i;
-            findMin(1, numbers);
+            findMin(1);
         }
         System.out.println(minValue);
         
@@ -48,7 +47,7 @@ public class Main {
     }
     
     
-    static void findMin(int depth, int[] numbers) {
+    static void findMin(int depth) {
         if(minFinish) return;
 
         if(depth == N+1) {
@@ -68,7 +67,7 @@ public class Main {
                 if(!check[i]) {
                     numbers[depth] = i;
                     check[i] = true;
-                    findMin(depth+1, numbers);
+                    findMin(depth+1);
                     check[i] = false;
                 }
             }
@@ -77,14 +76,14 @@ public class Main {
                 if(!check[i]) {
                     numbers[depth] = i;
                     check[i] = true;
-                    findMin(depth+1, numbers);
+                    findMin(depth+1);
                     check[i] = false;
                 }
             }
         }
     }
 
-    static void findMax(int depth, int[] numbers) {
+    static void findMax(int depth) {
         if(maxFinish) return;
 
         if(depth == N+1) {
@@ -104,7 +103,7 @@ public class Main {
                 if(!check[i]) {
                     numbers[depth] = i;
                     check[i] = true;
-                    findMax(depth+1, numbers);
+                    findMax(depth+1);
                     check[i] = false;
                 }
             }
@@ -113,7 +112,7 @@ public class Main {
                 if(!check[i]) {
                     numbers[depth] = i;
                     check[i] = true;
-                    findMax(depth+1, numbers);
+                    findMax(depth+1);
                     check[i] = false;
                 }
             }
