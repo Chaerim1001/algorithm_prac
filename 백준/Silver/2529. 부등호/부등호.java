@@ -1,53 +1,122 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
     static int N;
-	static boolean[] c = new boolean[10]; 
-	static char[] arr = new char[10];
-	static ArrayList answer = new ArrayList<>();
+    static String[] sign;
+    static boolean[] check;
+    static int[] numbers;
+    static String minValue;
+    static boolean minFinish = false;
+
+    static String maxValue;
+    static boolean maxFinish = false;
     
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
 
-		for (int i=0; i<N; i++) {
-			arr[i] = sc.next().toCharArray()[0];
-		}
-
-		go(0, "");
-		Collections.sort(answer);
-
-		System.out.println(answer.get(answer.size() - 1));
-		System.out.println(answer.get(0));
-	}
-    
-    	static void go(int index, String num) {
-		if (index == N+1) {
-			answer.add(num);
-			return;
-		}
-
-		for (int i=0; i<=9; i++) {
-			if (c[i])
-				continue;
-			if (index == 0 || check(num.charAt(index - 1), (char)(i + '0'), arr[index - 1])) {
-				c[i] = true;
-				go(index + 1, num + Integer.toString(i));
-				c[i] = false;
-			}
-		}
-	}
-    
-    static boolean check(char a, char b, char c) {
-		if (c == '<') {
-			if (a > b) return false;
-		}
+        sign = new String[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++) {
+            sign[i] = st.nextToken();
+        }
         
-		if (c == '>') {
-			if (a < b) return false;
-		}
-        
-		return true;
-	}
+        for(int i=9; i>=0; i--) {
+            if(maxFinish) break;
+            
+            numbers = new int[N+1];
+            check = new boolean[10];
+            check[i] = true;
+            numbers[0] = i;
+            findMax(1, numbers);
+        }
+        System.out.println(maxValue);
 
+        for(int i=0; i<10; i++) {
+            if(minFinish) break;
+            
+            numbers = new int[N+1];
+            check = new boolean[10];
+            check[i] = true;
+            numbers[0] = i;
+            findMin(1, numbers);
+        }
+        System.out.println(minValue);
+        
+        br.close();
+    }
+    
+    
+    static void findMin(int depth, int[] numbers) {
+        if(minFinish) return;
+
+        if(depth == N+1) {
+            String min = "";
+            for(int n: numbers) {
+                min += n;
+            }
+            minValue = min;
+            minFinish = true;
+            return;
+        }
+        
+        String s = sign[depth-1];
+        int pre = numbers[depth-1];
+        if(s.equals("<")){
+            for(int i=pre+1; i<10; i++) {
+                if(!check[i]) {
+                    numbers[depth] = i;
+                    check[i] = true;
+                    findMin(depth+1, numbers);
+                    check[i] = false;
+                }
+            }
+        } else {
+            for(int i=0; i<pre; i++) {
+                if(!check[i]) {
+                    numbers[depth] = i;
+                    check[i] = true;
+                    findMin(depth+1, numbers);
+                    check[i] = false;
+                }
+            }
+        }
+    }
+
+    static void findMax(int depth, int[] numbers) {
+        if(maxFinish) return;
+
+        if(depth == N+1) {
+            String max = "";
+            for(int n: numbers) {
+                max += n;
+            }
+            maxValue = max;
+            maxFinish = true;
+            return;
+        }
+        
+        String s = sign[depth-1];
+        int pre = numbers[depth-1];
+        if(s.equals("<")){
+            for(int i=9; i>pre; i--) {
+                if(!check[i]) {
+                    numbers[depth] = i;
+                    check[i] = true;
+                    findMax(depth+1, numbers);
+                    check[i] = false;
+                }
+            }
+        } else {
+            for(int i=pre-1; i>=0; i--) {
+                if(!check[i]) {
+                    numbers[depth] = i;
+                    check[i] = true;
+                    findMax(depth+1, numbers);
+                    check[i] = false;
+                }
+            }
+        }
+    }
 }
