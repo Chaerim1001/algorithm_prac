@@ -1,57 +1,61 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
     static int L, C;
     static char[] arr;
     static boolean[] visited;
+    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
-        visited = new boolean[C];
-        arr = new char[C];
         
-        st = new StringTokenizer(br.readLine()); 
-        for(int i=0; i<C; i++) {
+        arr = new char[C];
+        visited = new boolean[C];
+
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<C; i++) { 
             arr[i] = st.nextToken().charAt(0);
         }
-        
         Arrays.sort(arr);
-        makeCode(0, 0);
         
+        combination(0, L);
+
+        bw.flush();
         br.close();
+        bw.close();
     }
     
-    static void makeCode(int start, int length) {
-        if(length == L) {
-            StringBuilder sb = new StringBuilder();
-            int v = 0;
-            int c = 0;
-            
-            for(int i=0; i<C; i++) {
-                if(visited[i]) {
-                    if(isVowel(arr[i])) v++;
-                    else c++;
-                    
-                    sb.append(arr[i]);
-                }
-            }
-            
-            if(v>=1 && c>=2) System.out.println(sb);
-            
-        } else {
-            for(int i=start; i<C; i++) {
-                visited[i] = true;
-                makeCode(i+1, length+1);
-                visited[i] = false;
+    static void combination(int idx, int r) throws IOException {
+        if(r == 0) {
+            print();
+            return;
+        }
+
+        if(idx == C) return;
+
+        visited[idx] = true;
+        combination(idx+1, r-1 );
+
+        visited[idx] = false;
+        combination(idx+1, r);
+    }
+    
+    static void print() throws IOException {
+        StringBuilder sb = new StringBuilder();
+        int c = 0;
+        int v = 0;
+        for(int i=0; i<C; i++) {
+            if(visited[i]) {
+               sb.append(arr[i]);
+               if(arr[i] == 'a' || arr[i] == 'e' || arr[i] == 'i'|| arr[i] == 'o'|| arr[i] == 'u') v++;
+               else c++;
             }
         }
-    }
-    
-    static boolean isVowel(char c) {
-        if(c=='a' || c=='e' || c=='i' || c=='o' || c=='u') return true;
-        else return false;
+
+        if(v>=1 && c>=2) bw.append(sb + "\n");
     }
 }
