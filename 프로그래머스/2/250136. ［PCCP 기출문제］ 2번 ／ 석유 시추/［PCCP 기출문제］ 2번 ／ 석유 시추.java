@@ -1,73 +1,54 @@
 import java.util.*;
 
 class Solution {
-    static int[] dx = {-1, 1, 0, 0};
-    static int[] dy = {0, 0, -1, 1};
-    static Map<Integer, List<Integer>> map;
     public int solution(int[][] land) {
-        map = new HashMap<>();
-        for(int i=0; i<land[0].length; i++) {
-            map.put(i, new ArrayList<>());
-        }
-        
-        for(int i=0; i<land.length; i++) {
-            for(int j=0; j<land[0].length; j++) {
-                if(land[i][j] == 1) {
-                    bfs(land, i, j);
-                }
-            }
-        }
-        
-        int answer = Integer.MIN_VALUE;
-        for(int i=0; i<land[0].length; i++) {
-            int count = 0;
-            for(int n: map.get(i)) {
-                count+=n;
-            }
-            answer = Math.max(count, answer);
-        }
+        int r = land.length;
+        int c = land[0].length;
 
-        return answer;
-    }
-    
-    public void bfs(int[][] land, int x, int y) {
-        Set<Integer> set = new HashSet<>();
-        
-        Queue<Node> q = new LinkedList<>();
-        q.offer(new Node(x, y));
-        
-        int count = 0;
-        land[x][y] = -1;
-        set.add(y);
-        
-        while(!q.isEmpty()) {
-            Node now = q.poll();    
-            count++;
-            
-            for(int i=0; i<4; i++) {
-                int nx = now.x + dx[i];
-                int ny = now.y + dy[i];
-                if(nx<0 || ny<0 || nx>=land.length || ny>=land[0].length) continue;
-                if(land[nx][ny] == 1) {
-                    set.add(ny);
-                    land[nx][ny] = -1;
-                    q.offer(new Node(nx, ny));
+        int[] cnt = new int[c];
+
+        for (int i = 0; i < r; i++) {
+            for (int j = 0; j < c; j++) {
+                if (land[i][j] == 0) continue;
+
+                Set<Integer> candidates = new HashSet<>();
+                Queue<int[]> q = new ArrayDeque<>();
+                q.add(new int[]{i, j});
+                int area = 1;
+                land[i][j] = 0;
+                candidates.add(j);
+
+                while (!q.isEmpty()) {
+                    int[] cur = q.poll();
+                    int cr = cur[0];
+                    int cc = cur[1];
+
+                    for (int a = -1; a <= 1; a++) {
+                        for (int b = -1; b <= 1; b++) {
+                            if (((a^b)&1)!=1) continue;
+
+                            int nr = cr+a;
+                            int nc = cc+b;
+                            if (nr<0||nr>=r||nc<0||nc>=c||land[nr][nc]==0) continue;
+
+                            area++;
+                            land[nr][nc] = 0;
+                            candidates.add(nc);
+                            q.add(new int[]{nr, nc});
+                        }
+                    }
+                }
+
+                for (int candidate : candidates) {
+                    cnt[candidate] += area;
                 }
             }
         }
 
-        for(int n: set) {
-            map.get(n).add(count);
+        int max = 0;
+        for (int i = 0; i < cnt.length; i++) {
+            if (cnt[i] > max) max = cnt[i];
         }
-    }
-}
-
-class Node {
-    int x;
-    int y;
-    
-    public Node(int x, int y) {
-        this.x = x;
-        this.y = y;
+        return max;
     }
 }
