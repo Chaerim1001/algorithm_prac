@@ -14,9 +14,7 @@ public class Main {
         
         boolean[][] check = new boolean[N][N];
         for(int i=0; i<N; i++) {
-            for(int j=i; j<N; j++) {
-                if(i==j) continue;
-                
+            for(int j=i+1; j<N; j++) {           
                 double gap = (double)(h[j]-h[i]) / (double)(j-i);
                 int idx = 1;
                 boolean able = true;
